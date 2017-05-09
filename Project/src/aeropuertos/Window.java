@@ -20,8 +20,8 @@ public class Window extends JFrame {
 	
 	static Display screen;
 	static City[] cities;
-	static int airportCost;
-	static int cityNum;
+	static int numCities;
+        static int totalCost;
 	
 	public Window() {
 		setLayout(null);
@@ -50,27 +50,44 @@ public class Window extends JFrame {
 	
 	public static void addCity(int x, int y) {
 		if (cities != null) {
-			cities[cityNum%cities.length].setX(x);
-			cities[cityNum%cities.length].setY(y);
-			cityNum++;
+			cities[numCities%cities.length].setX(x);
+			cities[numCities%cities.length].setY(y);
+			numCities++;
 		}
 	}
 	
 	public static void solve() {
 //		int[] possibleConnections = new int[cities.length];
 		System.out.println("Starting...");
-		
-		boolean changed = true;
-		while (changed) {
-			changed = case1and2();
-		}
-		
-		changed = true;
-		while (changed) {
-			changed = case3();
-			changed = changed || case4();
-		}
+		boolean solved = false;
+                while(!solved){
+                    boolean changed = true;
+                    while (changed) {
+                            changed = case1and2();
+                    }
+
+    //		changed = true;
+    //		while (changed) {
+                            changed = case3();
+                            changed = changed || case4();
+    //		}
+                    solved = !changed;
+                }
 		System.out.println("Done!");
+                
+                totalCost = 0;
+                for (int i = 0; i < cities.length; i++) {
+                    if (cities[i].isAirport()) {
+                        System.out.println(i+" is airport");
+                        for (int j = 0; j < cities.length; j++) {
+                            if (cities[i].getConnection(j)){
+                                System.out.println("connected to "+j);
+                                totalCost = totalCost + cities[i].getTravelCost(j);
+                            }
+                        }
+                    }
+                }
+                System.out.println(totalCost);
 	}
 	
 	private static boolean case1and2() {
@@ -83,7 +100,7 @@ public class Window extends JFrame {
 				int samePrice = 0;
 				for (int j = 0; j < cities.length; j++) {
 					if (cities[i].isValidConnection(j)) {
-						if (cities[i].getTravelCost(j) < airportCost) {
+						if (cities[i].getTravelCost(j) < cities[i].getAirportCost()) {
 							validWays++;
 							validWayIndex = j;
 							if (cities[i].getTravelCost(j) != cost) {
@@ -107,6 +124,7 @@ public class Window extends JFrame {
 					// CUESTA MENOS QUE UN AEROPUERTO, SE PONE
 					// ESA CARRETERA
 					cities[i].setConnection(validWayIndex, true);
+                                        cities[validWayIndex].setConnection(i,true);
 					cities[i].setState(City.STATE_CON);
 					cities[validWayIndex].setState(City.STATE_AIR);
 					System.out.println("CASE 2: "+(i+1)+" is now connected!");
@@ -154,6 +172,7 @@ public class Window extends JFrame {
 					// CON UNA CIUDAD QUE YA TIENE AEROPUERTO,
 					// SE PONE ESA CARRETERA
 					cities[i].setConnection(airportIndex,true);
+					cities[airportIndex].setConnection(i,true);
 					cities[i].setState(City.STATE_CON);
 					System.out.println("CASE 3: "+(i+1)+" is now connected!");
 					changed = true;
@@ -165,20 +184,22 @@ public class Window extends JFrame {
 	
 	private static boolean case4() {
 		boolean changed = false;
-		int lowestSum = -1;
+		int highestSave = -1;
 		int lowestIndex = -1;
 		for (int i = 0; i < cities.length; i++) {
 			if (!cities[i].isDone()) {
 				int sum = 0;
+                                int totalAirportCost = 0;
 				for (int j = 0; j < cities.length; j++) {
 					if (!cities[j].isDone() && cities[i].isValidConnection(j)) {
 						sum = sum + cities[i].getTravelCost(j);
+                                                totalAirportCost = totalAirportCost + cities[j].getAirportCost();
 					}
 				}
-				if (sum < lowestSum || lowestSum == -1) {
+				if (totalAirportCost-sum > highestSave || highestSave == -1) {
 					lowestIndex = i;
-					lowestSum = sum;
-					changed = true;
+					highestSave = totalAirportCost-sum;
+					changed = true; 
 				}
 			}
 		}
@@ -190,8 +211,9 @@ public class Window extends JFrame {
 	}
 	
 	private void init() {
-		cityNum = 0;
-		
+		numCities = 0;
+		totalCost = 0;
+                
 		screen = new Display();
 		screen.setSize(WINDOW_X,WINDOW_Y);
 		screen.setLocation(1,1);

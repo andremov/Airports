@@ -28,13 +28,16 @@ public class City {
 	private int state;
 	private int fontSize;
 	private int fontX;
-	private int fontY;
+        private int fontY;
+        private int airportCost;
+        private boolean displayFullName = true;
 	private int x;
 	private int y;
 
-	public City(String name, int[] travelCost) {
+	public City(String name, int airportCost, int[] travelCost) {
 		this.name = name;
 		this.x = -200;
+                this.airportCost = airportCost;
 		this.y = -200;
 		this.state = STATE_DIS;
 		this.connections = new Object[travelCost.length][2];
@@ -43,12 +46,18 @@ public class City {
 			this.connections[i][1] = false;
 		}
 		
-		fontSize = 20;
+		fontSize = 40;
 		Font font = new Font("Arial",Font.PLAIN,fontSize);
 		Graphics g = new BufferedImage(300, 250, BufferedImage.TYPE_INT_ARGB).getGraphics();
 		java.awt.FontMetrics metrics = g.getFontMetrics(font);
-		while (60 - metrics.stringWidth(this.name) < 0) {
+		while (60 - metrics.stringWidth(this.name) < 0 || 20 - metrics.getHeight() < 0) {
 			fontSize--;
+                        if (fontSize <= 12) {
+                            fontSize = 40;
+                            this.name = this.name.substring(0, this.name.length()-1);
+                        }
+                        font = new Font("Arial",Font.PLAIN,fontSize);
+                        metrics = g.getFontMetrics(font);
 		}
 		fontX = (60 - metrics.stringWidth(this.name)) / 2;
 		fontY = ((20 - metrics.getHeight()) / 2) + metrics.getAscent();
@@ -177,5 +186,12 @@ public class City {
 	public void setConnection(int index, boolean connection) {
 		this.connections[index][1] = connection;
 	}
+
+    /**
+     * @return the airportCost
+     */
+    public int getAirportCost() {
+        return airportCost;
+    }
 	
 }

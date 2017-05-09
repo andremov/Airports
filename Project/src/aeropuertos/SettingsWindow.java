@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -31,9 +32,6 @@ public class SettingsWindow extends JFrame {
 	JTextField cityName;
 	JButton addCityBtn;
 	JButton remCityBtn;
-	
-	JLabel airportCostDisplay;
-	JTextField airportCost;
 	
 	JTable citiesTable;
 	
@@ -53,10 +51,15 @@ public class SettingsWindow extends JFrame {
 	private void init() {
 		
 		citiesTable = new JTable();
-		citiesTable.setModel(new TableModel(new String[] {"Nombre"},0));
+		citiesTable.setModel(new TableModel(new String[] {"Nombre","Precio Aeropuerto"},0));
 		citiesTable.setRowHeight(30);
+                citiesTable.getColumnModel().getColumn(0).setPreferredWidth(140);
+                citiesTable.getColumnModel().getColumn(1).setPreferredWidth(120);
+                citiesTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+                citiesTable.getTableHeader().setReorderingAllowed(false);
 		
 		JScrollPane scroll = new JScrollPane(citiesTable);
+                scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setSize(600, 559);
 		scroll.setLocation(1,1);
 		add(scroll);
@@ -94,20 +97,9 @@ public class SettingsWindow extends JFrame {
 		});
 		add(remCityBtn);
 		
-		airportCostDisplay = new JLabel("Costo de Aeropuerto:");
-		airportCostDisplay.setSize(180, 40);
-		airportCostDisplay.setLocation(605, 140);
-		add(airportCostDisplay);
-		
-		airportCost = new JTextField();
-		airportCost.setSize(175, 40);
-		airportCost.setFont(new Font("Arial",Font.BOLD,30));
-		airportCost.setLocation(605, 180);
-		add(airportCost);
-		
 		final String text = "Ingrese '-1' para inhabilitar una conexion.";
-        final String html1 = "<html><body style='width: ";
-        final String html2 = "px'>";
+                final String html1 = "<html><body style='width: ";
+                final String html2 = "px'>";
 		infoDisplay = new JLabel(html1+175+html2+text);
 		infoDisplay.setSize(175, 40);
 		infoDisplay.setLocation(605, 320);
@@ -120,7 +112,6 @@ public class SettingsWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Window.airportCost = Integer.parseInt(airportCost.getText());
 					create();
 					Window.solve();
 				} catch(Exception ex) {
@@ -144,6 +135,7 @@ public class SettingsWindow extends JFrame {
 				rowData[i] = "10";
 			}
 			rowData[0] = name;
+                        rowData[1] = "100";
 			model.addRow(rowData);
 			
 			cityName.setText("");
@@ -168,22 +160,31 @@ public class SettingsWindow extends JFrame {
 			City[] cities = new City[model.getRowCount()];
 
 			for (int i = 0; i < model.getRowCount(); i++) {
-				for (int j = 1; j < i+1; j++) {
-					citiesTable.setValueAt(citiesTable.getValueAt(i,j), j-1, i+1);
+				for (int j = 2; j < i+2; j++) {
+					citiesTable.setValueAt(citiesTable.getValueAt(i,j), j-2, i+2);
 				}
 			}
 			for (int i = 0; i < model.getRowCount(); i++) {
-				citiesTable.setValueAt("-1", i, i+1);
+				citiesTable.setValueAt("-1", i, i+2);
 			}
 
 
 			for (int i = 0; i < model.getRowCount(); i++) {
 				String name = (String) model.getValueAt(i,0);
+                                int airportCost = Integer.parseInt((String)model.getValueAt(i, 1));
+                                if (airportCost < 0) {
+                                    throw new Exception();
+                                }
 				int[] costos = new int[model.getColumnCount()];
-				for (int j = 1; j < model.getColumnCount(); j++) {
-					costos[j-1] = Integer.parseInt((String)model.getValueAt(i,j));
+				for (int j = 2; j < model.getColumnCount(); j++) {
+                                        int value = Integer.parseInt((String)model.getValueAt(i,j));
+                                        if (value < 0) {
+                                            value = -1;
+                                        }
+					costos[j-2] = value;
+                                        
 				}
-				City newCity = new City(name,costos);
+				City newCity = new City(name,airportCost,costos);
 				cities[i] = newCity;
 			}
 
@@ -195,14 +196,14 @@ public class SettingsWindow extends JFrame {
 			JOptionPane.showMessageDialog(null,"Digite numeros validos.", "Error", JOptionPane.ERROR_MESSAGE);
 		} finally {
 			for (int i = 0; i < model.getRowCount(); i++) {
-				for (int j = 1; j < model.getColumnCount(); j++) {
-					if (i < j-1) {
+				for (int j = 2; j < model.getColumnCount(); j++) {
+					if (i < j-2) {
 						citiesTable.setValueAt("", i, j);
 					}
 				}
 			}
 			for (int i = 0; i < model.getRowCount(); i++) {
-				citiesTable.setValueAt("", i, i+1);
+				citiesTable.setValueAt("", i, i+2);
 			}
 		}
 	}
@@ -214,7 +215,7 @@ public class SettingsWindow extends JFrame {
 		
 		@Override
 		public boolean isCellEditable(int row, int col) {
-			return (col != 0 && row > (col-1));
+			return (col != 0 && row > (col-2));
 		}
 
 		public void removeColumn(int col) {
