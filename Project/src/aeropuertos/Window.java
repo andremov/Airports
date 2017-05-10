@@ -91,13 +91,13 @@ public class Window extends JFrame {
 		for (int i = 0; i < cities.length; i++) {
 			if (!cities[i].isDone()) {
 				int validWays = 0;
-				int validWayIndex= -1;
+//				int validWayIndex= -1;
 				int cost = -1;
 				for (int j = 0; j < cities.length; j++) {
 					if (cities[i].isValidConnection(j)) {
 						if (cities[i].getTravelCost(j) < cities[i].getAirportCost()) {
 							validWays++;
-							validWayIndex = j;
+//							validWayIndex = j;
 							if (cities[i].getTravelCost(j) != cost) {
 								cost = cities[i].getTravelCost(j);
 							}
@@ -111,17 +111,17 @@ public class Window extends JFrame {
 					cities[i].setState(City.STATE_AIR);
 					System.out.println("CASE 1: "+cities[i].getName()+" is now an airport!");
 					changed = true;
-				} else if (validWays == 1) {
+//				} else if (validWays == 1) {
 					// SI LA CIUDAD SOLO TIENE UNA CARRETERA QUE
 					// CUESTA MENOS QUE UN AEROPUERTO, SE PONE
 					// ESA CARRETERA
-					cities[i].setConnection(validWayIndex, true);
-                    cities[validWayIndex].setConnection(i,true);
-					cities[i].setState(City.STATE_CON);
-					cities[validWayIndex].setState(City.STATE_AIR);
-					System.out.println("CASE 2: "+cities[i].getName()+" is now connected!");
-					System.out.println("CASE 2: "+cities[validWayIndex].getName()+" is now an airport!");
-					changed = true;
+//					cities[i].setConnection(validWayIndex, true);
+//                    cities[validWayIndex].setConnection(i,true);
+//					cities[i].setState(City.STATE_CON);
+//					cities[validWayIndex].setState(City.STATE_AIR);
+//					System.out.println("CASE 2: "+cities[i].getName()+" is now connected!");
+//					System.out.println("CASE 2: "+cities[validWayIndex].getName()+" is now an airport!");
+//					changed = true;
 				}
 			}
 		}
@@ -136,7 +136,11 @@ public class Window extends JFrame {
 				boolean[] areCheapest = new boolean[cities.length];
 				for (int j = 0; j < cities.length; j++) {
 					if (cities[i].isValidConnection(j)) {
-						if (cities[i].getTravelCost(j) < cheapestRoad || cheapestRoad == -1) {
+						int travelCost = cities[i].getTravelCost(j);
+						if (!cities[j].isAirport()) {
+							travelCost = travelCost + cities[j].getAirportCost();
+						}
+						if (travelCost < cheapestRoad || cheapestRoad == -1) {
 							if (!cities[j].isConnected()){
 								// SOLO ES POSIBILIDAD SI
 								// LA CIUDAD NO HA TERMINADO
