@@ -63,7 +63,7 @@ public class Window extends JFrame {
 		while(!solved){
 			boolean changed = true;
 			while (changed) {
-				changed = case1and2();
+				changed = case1();
 			}
 
 			changed = case3();
@@ -86,18 +86,16 @@ public class Window extends JFrame {
 		}
 	}
 	
-	private static boolean case1and2() {
+	private static boolean case1() {
 		boolean changed = false;
 		for (int i = 0; i < cities.length; i++) {
 			if (!cities[i].isDone()) {
 				int validWays = 0;
-//				int validWayIndex= -1;
 				int cost = -1;
 				for (int j = 0; j < cities.length; j++) {
 					if (cities[i].isValidConnection(j)) {
 						if (cities[i].getTravelCost(j) < cities[i].getAirportCost()) {
 							validWays++;
-//							validWayIndex = j;
 							if (cities[i].getTravelCost(j) != cost) {
 								cost = cities[i].getTravelCost(j);
 							}
@@ -111,17 +109,6 @@ public class Window extends JFrame {
 					cities[i].setState(City.STATE_AIR);
 					System.out.println("CASE 1: "+cities[i].getName()+" is now an airport!");
 					changed = true;
-//				} else if (validWays == 1) {
-					// SI LA CIUDAD SOLO TIENE UNA CARRETERA QUE
-					// CUESTA MENOS QUE UN AEROPUERTO, SE PONE
-					// ESA CARRETERA
-//					cities[i].setConnection(validWayIndex, true);
-//                    cities[validWayIndex].setConnection(i,true);
-//					cities[i].setState(City.STATE_CON);
-//					cities[validWayIndex].setState(City.STATE_AIR);
-//					System.out.println("CASE 2: "+cities[i].getName()+" is now connected!");
-//					System.out.println("CASE 2: "+cities[validWayIndex].getName()+" is now an airport!");
-//					changed = true;
 				}
 			}
 		}
@@ -135,21 +122,17 @@ public class Window extends JFrame {
 				int cheapestRoad = -1;
 				boolean[] areCheapest = new boolean[cities.length];
 				for (int j = 0; j < cities.length; j++) {
-					if (cities[i].isValidConnection(j)) {
+					if (cities[i].isValidConnection(j) && !cities[j].isConnected()) {
 						int travelCost = cities[i].getTravelCost(j);
 						if (!cities[j].isAirport()) {
 							travelCost = travelCost + cities[j].getAirportCost();
 						}
 						if (travelCost < cheapestRoad || cheapestRoad == -1) {
-							if (!cities[j].isConnected()){
-								// SOLO ES POSIBILIDAD SI
-								// LA CIUDAD NO HA TERMINADO
-								for (int k = 0; k < cities.length; k++) {
-									areCheapest[k] = false;
-								}
-								areCheapest[j] = true;
-								cheapestRoad = cities[i].getTravelCost(j);
+							for (int k = 0; k < cities.length; k++) {
+								areCheapest[k] = false;
 							}
+							areCheapest[j] = true;
+							cheapestRoad = cities[i].getTravelCost(j);
 						} else if (cities[i].getTravelCost(j) == cheapestRoad) {
 							areCheapest[j] = true;
 						}
