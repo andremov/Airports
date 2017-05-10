@@ -21,7 +21,7 @@ public class Window extends JFrame {
 	static Display screen;
 	static City[] cities;
 	static int numCities;
-        static int totalCost;
+	static int totalCost;
 	
 	public Window() {
 		setLayout(null);
@@ -60,34 +60,30 @@ public class Window extends JFrame {
 //		int[] possibleConnections = new int[cities.length];
 		System.out.println("Starting...");
 		boolean solved = false;
-                while(!solved){
-                    boolean changed = true;
-                    while (changed) {
-                            changed = case1and2();
-                    }
+		while(!solved){
+			boolean changed = true;
+			while (changed) {
+				changed = case1and2();
+			}
 
-    //		changed = true;
-    //		while (changed) {
-                            changed = case3();
-                            changed = changed || case4();
-    //		}
-                    solved = !changed;
-                }
+			changed = case3();
+			changed = changed || case4();
+
+			solved = !changed;
+		}
 		System.out.println("Done!");
                 
-                totalCost = 0;
-                for (int i = 0; i < cities.length; i++) {
-                    if (cities[i].isAirport()) {
-                        System.out.println(i+" is airport");
-                        for (int j = 0; j < cities.length; j++) {
-                            if (cities[i].getConnection(j)){
-                                System.out.println("connected to "+j);
-                                totalCost = totalCost + cities[i].getTravelCost(j);
-                            }
-                        }
-                    }
-                }
-                System.out.println(totalCost);
+		totalCost = 0;
+		for (int i = 0; i < cities.length; i++) {
+			if (cities[i].isAirport()) {
+				totalCost = totalCost + cities[i].getAirportCost();
+				for (int j = 0; j < cities.length; j++) {
+					if (cities[i].getConnection(j)){
+						totalCost = totalCost + cities[i].getTravelCost(j);
+					}
+				}
+			}
+		}
 	}
 	
 	private static boolean case1and2() {
@@ -97,7 +93,6 @@ public class Window extends JFrame {
 				int validWays = 0;
 				int validWayIndex= -1;
 				int cost = -1;
-				int samePrice = 0;
 				for (int j = 0; j < cities.length; j++) {
 					if (cities[i].isValidConnection(j)) {
 						if (cities[i].getTravelCost(j) < cities[i].getAirportCost()) {
@@ -105,9 +100,6 @@ public class Window extends JFrame {
 							validWayIndex = j;
 							if (cities[i].getTravelCost(j) != cost) {
 								cost = cities[i].getTravelCost(j);
-								samePrice = 0;
-							} else {
-								samePrice++;
 							}
 						}
 					}
@@ -117,18 +109,18 @@ public class Window extends JFrame {
 					// CUESTAN MAS QUE UN AEROPUERTO, SE PONE
 					// UN AEROPUERTO
 					cities[i].setState(City.STATE_AIR);
-					System.out.println("CASE 1: "+(i+1)+" is now an airport!");
+					System.out.println("CASE 1: "+cities[i].getName()+" is now an airport!");
 					changed = true;
 				} else if (validWays == 1) {
 					// SI LA CIUDAD SOLO TIENE UNA CARRETERA QUE
 					// CUESTA MENOS QUE UN AEROPUERTO, SE PONE
 					// ESA CARRETERA
 					cities[i].setConnection(validWayIndex, true);
-                                        cities[validWayIndex].setConnection(i,true);
+                    cities[validWayIndex].setConnection(i,true);
 					cities[i].setState(City.STATE_CON);
 					cities[validWayIndex].setState(City.STATE_AIR);
-					System.out.println("CASE 2: "+(i+1)+" is now connected!");
-					System.out.println("CASE 2: "+(validWayIndex+1)+" is now an airport!");
+					System.out.println("CASE 2: "+cities[i].getName()+" is now connected!");
+					System.out.println("CASE 2: "+cities[validWayIndex].getName()+" is now an airport!");
 					changed = true;
 				}
 			}
@@ -174,7 +166,7 @@ public class Window extends JFrame {
 					cities[i].setConnection(airportIndex,true);
 					cities[airportIndex].setConnection(i,true);
 					cities[i].setState(City.STATE_CON);
-					System.out.println("CASE 3: "+(i+1)+" is now connected!");
+					System.out.println("CASE 3: "+cities[i].getName()+" is now connected!");
 					changed = true;
 				}
 			}
@@ -189,11 +181,11 @@ public class Window extends JFrame {
 		for (int i = 0; i < cities.length; i++) {
 			if (!cities[i].isDone()) {
 				int sum = 0;
-                                int totalAirportCost = 0;
+                int totalAirportCost = 0;
 				for (int j = 0; j < cities.length; j++) {
 					if (!cities[j].isDone() && cities[i].isValidConnection(j)) {
 						sum = sum + cities[i].getTravelCost(j);
-                                                totalAirportCost = totalAirportCost + cities[j].getAirportCost();
+                        totalAirportCost = totalAirportCost + cities[j].getAirportCost();
 					}
 				}
 				if (totalAirportCost-sum > highestSave || highestSave == -1) {
@@ -205,7 +197,7 @@ public class Window extends JFrame {
 		}
 		if (changed) {
 			cities[lowestIndex].setState(City.STATE_AIR);
-			System.out.println("CASE 4: "+(lowestIndex+1)+" is now an airport!");
+			System.out.println("CASE 4: "+cities[lowestIndex].getName()+" is now an airport!");
 		}
 		return changed;
 	}

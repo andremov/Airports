@@ -53,13 +53,13 @@ public class SettingsWindow extends JFrame {
 		citiesTable = new JTable();
 		citiesTable.setModel(new TableModel(new String[] {"Nombre","Precio Aeropuerto"},0));
 		citiesTable.setRowHeight(30);
-                citiesTable.getColumnModel().getColumn(0).setPreferredWidth(140);
-                citiesTable.getColumnModel().getColumn(1).setPreferredWidth(120);
-                citiesTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                citiesTable.getTableHeader().setReorderingAllowed(false);
+		citiesTable.getColumnModel().getColumn(0).setPreferredWidth(140);
+		citiesTable.getColumnModel().getColumn(1).setPreferredWidth(120);
+		citiesTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		citiesTable.getTableHeader().setReorderingAllowed(false);
 		
 		JScrollPane scroll = new JScrollPane(citiesTable);
-                scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll.setSize(600, 559);
 		scroll.setLocation(1,1);
 		add(scroll);
@@ -98,8 +98,8 @@ public class SettingsWindow extends JFrame {
 		add(remCityBtn);
 		
 		final String text = "Ingrese '-1' para inhabilitar una conexion.";
-                final String html1 = "<html><body style='width: ";
-                final String html2 = "px'>";
+		final String html1 = "<html><body style='width: ";
+		final String html2 = "px'>";
 		infoDisplay = new JLabel(html1+175+html2+text);
 		infoDisplay.setSize(175, 40);
 		infoDisplay.setLocation(605, 320);
@@ -132,10 +132,10 @@ public class SettingsWindow extends JFrame {
 			
 			Object[] rowData = new Object[citiesTable.getColumnCount()];
 			for (int i = 1; i < rowData.length; i++) {
-				rowData[i] = "10";
+				rowData[i] = "1";
 			}
 			rowData[0] = name;
-                        rowData[1] = "100";
+			rowData[1] = "9";
 			model.addRow(rowData);
 			
 			cityName.setText("");
@@ -148,7 +148,7 @@ public class SettingsWindow extends JFrame {
 		if (row >= 0) {
 			DefaultTableModel model = (DefaultTableModel) citiesTable.getModel();
 			model.removeRow(row);
-			((TableModel)model).removeColumn(row+1);
+			((TableModel)model).removeColumn(row+2);
 			create();
 		}
 	}
@@ -171,16 +171,16 @@ public class SettingsWindow extends JFrame {
 
 			for (int i = 0; i < model.getRowCount(); i++) {
 				String name = (String) model.getValueAt(i,0);
-                                int airportCost = Integer.parseInt((String)model.getValueAt(i, 1));
-                                if (airportCost < 0) {
-                                    throw new Exception();
-                                }
+				int airportCost = Integer.parseInt((String)model.getValueAt(i, 1));
+				if (airportCost < 0) {
+					throw new Exception();
+				}
 				int[] costos = new int[model.getColumnCount()];
 				for (int j = 2; j < model.getColumnCount(); j++) {
-                                        int value = Integer.parseInt((String)model.getValueAt(i,j));
-                                        if (value < 0) {
-                                            value = -1;
-                                        }
+					int value = Integer.parseInt((String)model.getValueAt(i,j));
+					if (value < 0) {
+						value = -1;
+					}
 					costos[j-2] = value;
                                         
 				}

@@ -67,31 +67,32 @@ public class Display extends Canvas implements Runnable {
 					g.drawImage(img, x, y, null);
 				}
                                 
-                                if (Window.numCities != 0){
-                                    
-                                    int fontSize = 30;
-                                    java.awt.Font font = new java.awt.Font("Arial",java.awt.Font.BOLD,fontSize);
-                                    g.setFont(font);
-                                    java.awt.FontMetrics metrics = g.getFontMetrics(font);
-                                    String costoDisplay = "Precio total: "+Window.totalCost;
-                                    int fontX = 196 - metrics.stringWidth(costoDisplay);
-                                    int fontY = 36 - metrics.getHeight();
-                                    while (fontX < 0 || fontY < 0) {
-                                            fontSize--;
-                                            font = new java.awt.Font("Arial",java.awt.Font.BOLD,fontSize);
-                                            metrics = g.getFontMetrics(font);
-                                            fontX = 196 - metrics.stringWidth(costoDisplay);
-                                            fontY = 36 - metrics.getHeight();
-                                    }
-                                    fontX = fontX / 2;
-                                    fontY = (fontY / 2) + metrics.getAscent();
-                                    
-                                    g.setColor(Color.black);
-                                    g.fillRect(2, getHeight()-40, 200, 40);
-                                    
-                                    g.setColor(Color.white);
-                                    g.drawString(costoDisplay,2+fontX,getHeight()-40+fontY);
-                                }
+				if (Window.totalCost != 0){
+
+					int fontSize = 30;
+					java.awt.Font font = new java.awt.Font("Arial",java.awt.Font.BOLD,fontSize);
+					java.awt.FontMetrics metrics = g.getFontMetrics(font);
+					
+					String costoDisplay = "Precio total: "+Window.totalCost;
+					int fontX = 196 - metrics.stringWidth(costoDisplay);
+					int fontY = 36 - metrics.getHeight();
+					while (fontX < 0 || fontY < 0) {
+						fontSize--;
+						font = new java.awt.Font("Arial",java.awt.Font.BOLD,fontSize);
+						metrics = g.getFontMetrics(font);
+						fontX = 196 - metrics.stringWidth(costoDisplay);
+						fontY = 36 - metrics.getHeight();
+					}
+					fontX = fontX / 2;
+					fontY = (fontY / 2) + metrics.getAscent();
+					g.setFont(font);
+
+					g.setColor(Color.black);
+					g.fillRect(2, getHeight()-40, 200, 40);
+
+					g.setColor(Color.white);
+					g.drawString(costoDisplay,2+fontX,getHeight()-40+fontY);
+				}
 
 				getBufferStrategy().show();
 			}
