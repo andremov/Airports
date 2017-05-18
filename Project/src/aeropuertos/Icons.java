@@ -19,7 +19,10 @@ public class Icons {
 	public static BufferedImage CITY_DIS;
 	public static BufferedImage CITY_CON;
 	public static BufferedImage CITY_AIR;
-		
+        
+        /**
+         * carga los iconos de las ciudades
+         */
 	public static void loadImages() {
 		
 		try {

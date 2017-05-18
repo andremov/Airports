@@ -48,6 +48,9 @@ public class SettingsWindow extends JFrame {
 		setVisible(true);
 	}
 	
+        /**
+         * inicializa la interfaz
+         */
 	private void init() {
 		
 		citiesTable = new JTable();
@@ -78,6 +81,7 @@ public class SettingsWindow extends JFrame {
 		addCityBtn = new JButton("Agregar Ciudad");
 		addCityBtn.setSize(175, 50);
 		addCityBtn.setLocation(605, 37);
+                addCityBtn.setFocusable(false);
 		addCityBtn.addActionListener(new ActionListener( ) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -89,6 +93,7 @@ public class SettingsWindow extends JFrame {
 		remCityBtn = new JButton("Eliminar Ciudad");
 		remCityBtn.setSize(175, 50);
 		remCityBtn.setLocation(605, 90);
+                remCityBtn.setFocusable(false);
 		remCityBtn.addActionListener(new ActionListener( ) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -108,6 +113,7 @@ public class SettingsWindow extends JFrame {
 		processBtn = new JButton("Resolver");
 		processBtn.setSize(175, 60);
 		processBtn.setLocation(605, 400);
+                processBtn.setFocusable(false);
 		processBtn.addActionListener(new ActionListener( ) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -122,6 +128,9 @@ public class SettingsWindow extends JFrame {
 		add(processBtn);
 	}
 	
+        /**
+         * agrega una ciudad a la tabla
+         */
 	private void addCity() {
 		String name = cityName.getText();
 		if (!name.isEmpty()) {
@@ -143,6 +152,9 @@ public class SettingsWindow extends JFrame {
 		}
 	}
 	
+        /**
+         * elimina una ciudad de la tabla
+         */
 	private void removeCity() {
 		int row = citiesTable.getSelectedRow();
 		if (row >= 0) {
@@ -153,6 +165,9 @@ public class SettingsWindow extends JFrame {
 		}
 	}
 	
+        /**
+         * manda la informacion a la ventana principal
+         */
 	private void create() {
 		DefaultTableModel model = (DefaultTableModel) citiesTable.getModel();
 		
@@ -214,7 +229,11 @@ public class SettingsWindow extends JFrame {
 		public boolean isCellEditable(int row, int col) {
 			return (col != 0 && row > (col-2));
 		}
-
+                  
+                /**
+                 * elimina una columna
+                 * @param col 
+                 */
 		public void removeColumn(int col) {
 			if (col != getColumnCount()-1) {
 				for (int i = 0; i < this.getRowCount(); i++) {

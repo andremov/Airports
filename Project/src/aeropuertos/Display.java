@@ -18,18 +18,27 @@ import java.awt.image.BufferedImage;
  */
 public class Display extends Canvas implements Runnable {
 
-	
+	/**
+         * devuelve el color dado por parametros en HSB
+         * @param h
+         * @param s
+         * @param b
+         * @return 
+         */
 	private Color color(double h, double s, double b) {
 		return Color.getHSBColor((float)(h/360f),(float)(s/100f),(float)(b/100f));
 	}
 	
+        /**
+         * pinta el canvas
+         */
 	@Override
 	public void run() {
 		createBufferStrategy(2);
 		setBackground(color(51,54.1,91.4));
 		addMouseListener(new MouseListener() {
 			@Override
-			public void mouseClicked(MouseEvent e) { Window.addCity(e.getX(), e.getY()); }
+			public void mouseClicked(MouseEvent e) { Window.locateCity(e.getX(), e.getY()); }
 			@Override
 			public void mousePressed(MouseEvent e) {}
 			@Override
