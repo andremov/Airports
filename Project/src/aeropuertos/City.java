@@ -102,8 +102,72 @@ public class City {
 		return image;
 	}
 	
+	public int getCheapestTravelCost() {
+		int lowestCost = -1;
+		for (int i = 0; i < connections.length; i++) {
+			if (isValidConnection(i)) {
+				if (getTravelCost(i) < lowestCost || lowestCost == -1) {
+					lowestCost = getTravelCost(i);
+				}
+			}
+		}
+		return lowestCost;
+	}
+	
+	public int getNumCheapestConnections() {
+		int lowestCost = getCheapestTravelCost();
+		int numCheapest = 0;
+		for (int i = 0; i < connections.length; i++) {
+			if (getTravelCost(i) == lowestCost) {
+				numCheapest++;
+			}
+		}
+		return numCheapest;
+	}
+	
+	public int[] getCheapestConnections() {
+		int[] cheapestIDs = new int[getNumCheapestConnections()];
+		int lowestCost = getCheapestTravelCost();
+		int added = 0;
+		for (int i = 0; i < connections.length; i++) {
+			if (getTravelCost(i) == lowestCost) {
+				cheapestIDs[added] = i;
+				added++;
+			}
+		}
+		return cheapestIDs;
+	}
+	
 	public boolean isValidConnection(int index) {
-		return getTravelCost(index) >= 0;
+		return getTravelCost(index) > 0;
+	}
+	
+	public boolean isCheapConnection(int index) {
+		return isValidConnection(index) && getTravelCost(index) <= getAirportCost();
+	}
+	
+	public boolean isCheapestConnection(int index) {
+		return getTravelCost(index) == getCheapestTravelCost();
+	}
+	
+	public int numValidWays() {
+		int vw = 0;
+		for (int i = 0; i < connections.length; i++) {
+			if (isValidConnection(i)) {
+				vw++;
+			}
+		}
+		return vw;
+	}
+	
+	public int numCheaperWays() {
+		int vw = 0;
+		for (int i = 0; i < connections.length; i++) {
+			if (isValidConnection(i) && getTravelCost(i) < getAirportCost()) {
+				vw++;
+			}
+		}
+		return vw;
 	}
 
 	/**

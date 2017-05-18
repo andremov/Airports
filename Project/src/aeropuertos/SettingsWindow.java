@@ -172,7 +172,7 @@ public class SettingsWindow extends JFrame {
 			for (int i = 0; i < model.getRowCount(); i++) {
 				String name = (String) model.getValueAt(i,0);
 				int airportCost = Integer.parseInt((String)model.getValueAt(i, 1));
-				if (airportCost < 0) {
+				if (airportCost <= 0) {
 					throw new Exception();
 				}
 				int[] costos = new int[model.getColumnCount()];
@@ -182,7 +182,6 @@ public class SettingsWindow extends JFrame {
 						value = -1;
 					}
 					costos[j-2] = value;
-                                        
 				}
 				City newCity = new City(name,airportCost,costos);
 				cities[i] = newCity;
@@ -190,9 +189,6 @@ public class SettingsWindow extends JFrame {
 
 			Window.setCities(cities);
 		}catch (Exception e) {
-			for (int i = 0; i < e.getStackTrace().length; i++) {
-				System.err.println(e.getStackTrace()[i]);
-			}
 			JOptionPane.showMessageDialog(null,"Digite numeros validos.", "Error", JOptionPane.ERROR_MESSAGE);
 		} finally {
 			for (int i = 0; i < model.getRowCount(); i++) {
@@ -207,6 +203,7 @@ public class SettingsWindow extends JFrame {
 			}
 		}
 	}
+	
 	private class TableModel extends DefaultTableModel {
 
 		public TableModel(Object[] columnNames, int rowCount) {
