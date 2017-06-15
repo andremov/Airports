@@ -21,8 +21,8 @@ public class Window extends JFrame {
 	static Display screen;
 	static City[] cities;
 	public static int MAX_CITIES;
-        private static int currentCity;
-        static int totalCost;
+	private static int currentCity;
+	static int totalCost;
 	
 	public Window() {
 		setLayout(null);
@@ -39,10 +39,10 @@ public class Window extends JFrame {
 		new Thread(screen).start();
 	}
 	
-        /**
-         * recibe las ciudades entregadas poor parametro
-         * @param pCities 
-         */
+	/**
+	 * recibe las ciudades entregadas poor parametro
+	 * @param pCities 
+	 */
 	public static void setCities(City[] pCities) {
 		if (cities != null) {
 			for (int i = 0; i < Integer.min(pCities.length, cities.length); i++) {
@@ -54,11 +54,11 @@ public class Window extends JFrame {
                 MAX_CITIES = cities.length;
 	}
 	
-        /**
-         * ubica una ciudad en el x y y pasado por parametro
-         * @param x
-         * @param y 
-         */
+	/**
+	 * ubica una ciudad en el x y y pasado por parametro
+	 * @param x
+	 * @param y 
+	 */
 	public static void locateCity(int x, int y) {
 		if (cities != null) {
 			cities[currentCity%cities.length].setX(x);
@@ -67,9 +67,9 @@ public class Window extends JFrame {
 		}
 	}
 	
-        /**
-         * resuelve el problema dado
-         */
+	/**
+	 * resuelve el problema dado
+	 */
 	public static void solve() {
 		System.out.println("Starting...");
 		
@@ -83,7 +83,7 @@ public class Window extends JFrame {
 			case7();
 			case8();
 			case9();
-                        case10();
+			case10();
 		}
 		
 		System.out.println("Finished.");
@@ -368,17 +368,17 @@ public class Window extends JFrame {
 					}
 				}
 				
-                                if (numCitiesRemoved > bestCitiesRemoved) {
-                                        bestIndex = i;
-                                        bestCost = cost;
-                                        bestCitiesRemoved = numCitiesRemoved;
+				if (numCitiesRemoved > bestCitiesRemoved) {
+						bestIndex = i;
+						bestCost = cost;
+						bestCitiesRemoved = numCitiesRemoved;
 				} else if (numCitiesRemoved == bestCitiesRemoved) {
-                                        if (cost < bestCost || bestCost == -1) {
+					if (cost < bestCost || bestCost == -1) {
 						bestIndex = i;
 						bestCost = cost;
 						bestCitiesRemoved = numCitiesRemoved;
 					}
-                                }
+				}
 			}
 		}
 		if (bestIndex != -1) {
@@ -446,67 +446,67 @@ public class Window extends JFrame {
 //		System.out.println("10");
 		for (int i = 0; i < MAX_CITIES; i++) {
 			if (cities[i].isConnected()) {
-                                int currentCost = 0;
-                                for (int j = 0; j < MAX_CITIES; j++) {
-                                    if (cities[i].getConnection(j)) {
-                                        currentCost = currentCost + cities[i].getTravelCost(j);
-                                    }
-                                }
-                                
-                                int lowestPossibleCost = -1;
-                                int lowestIndex = -1;
+				int currentCost = 0;
 				for (int j = 0; j < MAX_CITIES; j++) {
-                                    if (cities[j].isConnected() && cities[i].isValidConnection(j)) {
-                                        int minAirport = Integer.min(cities[j].getAirportCost(), cities[i].getAirportCost());
-                                        int connectionCost = cities[i].getTravelCost(j);
-                                        
-                                        int thisCost = 0;
-                                        for (int k = 0; k < MAX_CITIES; k++) {
-                                            if (cities[j].getConnection(k)) {
-                                                thisCost = thisCost + cities[j].getTravelCost(k);
-                                            }
-                                        }
-                                        
-					boolean validCost = minAirport+connectionCost < currentCost+thisCost ;
-					if (validCost) {
-                                            if (minAirport+connectionCost < lowestPossibleCost || lowestPossibleCost == -1) {
-						lowestIndex = j;
-                                                lowestPossibleCost = minAirport+connectionCost;
-                                            }
+					if (cities[i].getConnection(j)) {
+						currentCost = currentCost + cities[i].getTravelCost(j);
 					}
-                                    }
+				}
+
+				int lowestPossibleCost = -1;
+				int lowestIndex = -1;
+				for (int j = 0; j < MAX_CITIES; j++) {
+					if (cities[j].isConnected() && cities[i].isValidConnection(j)) {
+						int minAirport = Integer.min(cities[j].getAirportCost(), cities[i].getAirportCost());
+						int connectionCost = cities[i].getTravelCost(j);
+
+						int thisCost = 0;
+						for (int k = 0; k < MAX_CITIES; k++) {
+							if (cities[j].getConnection(k)) {
+								thisCost = thisCost + cities[j].getTravelCost(k);
+							}
+						}
+                                        
+						boolean validCost = minAirport+connectionCost < currentCost+thisCost ;
+						if (validCost) {
+							if (minAirport+connectionCost < lowestPossibleCost || lowestPossibleCost == -1) {
+								lowestIndex = j;
+								lowestPossibleCost = minAirport+connectionCost;
+							}
+						}
+					}
 				}
                                 
 				if (lowestIndex != -1) {
-                                    for (int j = 0; j < MAX_CITIES; j++) {
-                                        cities[lowestIndex].setConnection(j, false);
-                                        cities[i].setConnection(j, false);
-                                    }
-                                    System.out.println("CASE 10: "+cities[i].getName()+" is now disconnected!");
-                                    System.out.println("CASE 10: "+cities[lowestIndex].getName()+" is now disconnected!");
-                                    
-                                    cities[lowestIndex].setConnection(i, true);
-                                    cities[i].setConnection(lowestIndex, true);
-                                    
-                                    if (cities[lowestIndex].getAirportCost() < cities[i].getAirportCost()) {
-                                        System.out.println("CASE 10: "+cities[lowestIndex].getName()+" is now an airport!");
-                                        System.out.println("CASE 10: "+cities[i].getName()+" is now connected!");
-                                        cities[lowestIndex].setState(City.STATE_AIR);
-                                    } else {
-                                        System.out.println("CASE 10: "+cities[i].getName()+" is now an airport!");
-                                        System.out.println("CASE 10: "+cities[lowestIndex].getName()+" is now connected!");
-                                        cities[i].setState(City.STATE_AIR);
-                                    }
+					for (int j = 0; j < MAX_CITIES; j++) {
+						cities[lowestIndex].setConnection(j, false);
+						cities[i].setConnection(j, false);
+					}
+					System.out.println("CASE 10: "+cities[i].getName()+" is now disconnected!");
+					System.out.println("CASE 10: "+cities[lowestIndex].getName()+" is now disconnected!");
+
+					cities[lowestIndex].setConnection(i, true);
+					cities[i].setConnection(lowestIndex, true);
+
+					if (cities[lowestIndex].getAirportCost() < cities[i].getAirportCost()) {
+						System.out.println("CASE 10: "+cities[lowestIndex].getName()+" is now an airport!");
+						System.out.println("CASE 10: "+cities[i].getName()+" is now connected!");
+						cities[lowestIndex].setState(City.STATE_AIR);
+					} else {
+						System.out.println("CASE 10: "+cities[i].getName()+" is now an airport!");
+						System.out.println("CASE 10: "+cities[lowestIndex].getName()+" is now connected!");
+						cities[i].setState(City.STATE_AIR);
+					}
 				}
 			}
 		}
 	}
 	
-        /**
-         * el numero de ciudades que no han sido conectadas a un aeropuerto, que estan conectadas al indice dado
-         * @param index
-         * @return 
-         */
+	/**
+	 * el numero de ciudades que no han sido conectadas a un aeropuerto, que estan conectadas al indice dado
+	 * @param index
+	 * @return 
+	 */
 	private static int pendingCities(int index) {
 		int pc = 0;
 		for (int i = 0; i < MAX_CITIES; i++) {
@@ -516,10 +516,10 @@ public class Window extends JFrame {
 		}
 		return pc;
 	}
-	
-        /**
-         * inicializa la interfaz de esta ventana
-         */
+
+	/**
+	 * inicializa la interfaz de esta ventana
+	 */
 	private void init() {
 		MAX_CITIES = 0;
 		totalCost = 0;
@@ -531,10 +531,10 @@ public class Window extends JFrame {
 		
 	}
 	
-        /**
-         * el numero de ciudades que no han sido conectadas a un aeropuerto
-         * @return 
-         */
+	/**
+	 * el numero de ciudades que no han sido conectadas a un aeropuerto
+	 * @return 
+	 */
 	private static int numCitiesMissing() {
 		int num = 0;
 		

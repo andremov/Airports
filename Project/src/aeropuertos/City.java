@@ -63,26 +63,26 @@ public class City {
 		
 	}
 	
-        /**
-         * ciudad esta a 0 o 1 salto de un aeropuerto
-         * @return 
-         */
+	/**
+	 * ciudad esta a 0 o 1 salto de un aeropuerto
+	 * @return 
+	 */
 	public boolean isDone() {
 		return isAirport() || isConnected();
 	}
-	
-        /**
-         * ciudad esta a 0 saltos de un aeropuerto
-         * @return 
-         */
+
+	/**
+	 * ciudad esta a 0 saltos de un aeropuerto
+	 * @return 
+	 */
 	public boolean isAirport() {
 		return this.state == City.STATE_AIR;
 	}
 	
-        /**
-         * ciudad esta a 1 salto de un aeropuerto
-         * @return 
-         */
+	/**
+	 * ciudad esta a 1 salto de un aeropuerto
+	 * @return 
+	 */
 	public boolean isConnected() {
 		boolean connected = false;
 		for (int i = 0; i < connections.length; i++) {
@@ -91,10 +91,10 @@ public class City {
 		return connected && !isAirport();
 	}
 	
-        /**
-         * la imagen representativa de la ciudad
-         * @return 
-         */
+	/**
+	 * la imagen representativa de la ciudad
+	 * @return 
+	 */
 	public BufferedImage getImage() {
 		BufferedImage image = new BufferedImage(60, 70, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
@@ -118,10 +118,10 @@ public class City {
 		return image;
 	}
 	
-        /**
-         * el valor de la carretera mas barata para construir
-         * @return 
-         */
+	/**
+	 * el valor de la carretera mas barata para construir
+	 * @return 
+	 */
 	public int getCheapestTravelCost() {
 		int lowestCost = -1;
 		for (int i = 0; i < connections.length; i++) {
@@ -134,10 +134,10 @@ public class City {
 		return lowestCost;
 	}
 	
-        /**
-         * el numero de carreteras con el costo mas barato
-         * @return 
-         */
+	/**
+	 * el numero de carreteras con el costo mas barato
+	 * @return 
+	 */
 	public int getNumCheapestConnections() {
 		int lowestCost = getCheapestTravelCost();
 		int numCheapest = 0;
@@ -149,10 +149,10 @@ public class City {
 		return numCheapest;
 	}
 	
-        /**
-         * todos los indices de carreteras con el costo mas barato
-         * @return 
-         */
+	/**
+	 * todos los indices de carreteras con el costo mas barato
+	 * @return 
+	 */
 	public int[] getCheapestConnections() {
 		int[] cheapestIDs = new int[getNumCheapestConnections()];
 		int lowestCost = getCheapestTravelCost();
@@ -166,37 +166,37 @@ public class City {
 		return cheapestIDs;
 	}
 	
-        /**
-         * la conexion a el indice dado es valido
-         * @param index
-         * @return 
-         */
+	/**
+	 * la conexion a el indice dado es valido
+	 * @param index
+	 * @return 
+	 */
 	public boolean isValidConnection(int index) {
 		return getTravelCost(index) > 0;
 	}
 	
-        /**
-         * la conexion a el indice dado es mas barato que un aeropuerto
-         * @param index
-         * @return 
-         */
+	/**
+	 * la conexion a el indice dado es mas barato que un aeropuerto
+	 * @param index
+	 * @return 
+	 */
 	public boolean isCheapConnection(int index) {
 		return isValidConnection(index) && getTravelCost(index) <= getAirportCost();
 	}
 	
-        /**
-         * la conexion a el indice dado tiene el menor valor posible
-         * @param index
-         * @return 
-         */
+	/**
+	 * la conexion a el indice dado tiene el menor valor posible
+	 * @param index
+	 * @return 
+	 */
 	public boolean isCheapestConnection(int index) {
 		return getTravelCost(index) == getCheapestTravelCost();
 	}
 	
-        /**
-         * numero de conexiones validas
-         * @return 
-         */
+	/**
+	 * numero de conexiones validas
+	 * @return 
+	 */
 	public int numValidWays() {
 		int vw = 0;
 		for (int i = 0; i < connections.length; i++) {
@@ -207,10 +207,10 @@ public class City {
 		return vw;
 	}
 	
-        /**
-         * numero de conexiones mas baratas que su aeropuerto
-         * @return 
-         */
+	/**
+	 * numero de conexiones mas baratas que su aeropuerto
+	 * @return 
+	 */
 	public int numCheaperWays() {
 		int vw = 0;
 		for (int i = 0; i < connections.length; i++) {
@@ -301,11 +301,11 @@ public class City {
 		this.connections[index][1] = connection;
 	}
 
-        /**
-         * @return the airportCost
-         */
-        public int getAirportCost() {
-            return airportCost;
-        }
+	/**
+	 * @return the airportCost
+	 */
+	public int getAirportCost() {
+		return airportCost;
+	}
 	
 }

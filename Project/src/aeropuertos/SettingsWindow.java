@@ -48,9 +48,9 @@ public class SettingsWindow extends JFrame {
 		setVisible(true);
 	}
 	
-        /**
-         * inicializa la interfaz
-         */
+	/**
+	 * inicializa la interfaz
+	 */
 	private void init() {
 		
 		citiesTable = new JTable();
@@ -128,9 +128,9 @@ public class SettingsWindow extends JFrame {
 		add(processBtn);
 	}
 	
-        /**
-         * agrega una ciudad a la tabla
-         */
+	/**
+	 * agrega una ciudad a la tabla
+	 */
 	private void addCity() {
 		String name = cityName.getText();
 		if (!name.isEmpty()) {
@@ -152,9 +152,9 @@ public class SettingsWindow extends JFrame {
 		}
 	}
 	
-        /**
-         * elimina una ciudad de la tabla
-         */
+	/**
+	 * elimina una ciudad de la tabla
+	 */
 	private void removeCity() {
 		int row = citiesTable.getSelectedRow();
 		if (row >= 0) {
@@ -165,9 +165,9 @@ public class SettingsWindow extends JFrame {
 		}
 	}
 	
-        /**
-         * manda la informacion a la ventana principal
-         */
+	/**
+	 * manda la informacion a la ventana principal
+	 */
 	private void create() {
 		DefaultTableModel model = (DefaultTableModel) citiesTable.getModel();
 		
@@ -230,10 +230,10 @@ public class SettingsWindow extends JFrame {
 			return (col != 0 && row > (col-2));
 		}
                   
-                /**
-                 * elimina una columna
-                 * @param col 
-                 */
+		/**
+		 * elimina una columna
+		 * @param col 
+		 */
 		public void removeColumn(int col) {
 			if (col != getColumnCount()-1) {
 				for (int i = 0; i < this.getRowCount(); i++) {
